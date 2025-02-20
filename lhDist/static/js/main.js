@@ -745,18 +745,37 @@
 
 // ============ product details =============
 
-let styleCate = document.querySelectorAll('.cr-list ul li');
+document.addEventListener('DOMContentLoaded', function() {
+    let styleCate = document.querySelectorAll('.cr-list ul li');
+    let styleDec = document.querySelectorAll('.style-desciption ul li');
 
-let styleDec = document.querySelectorAll('.style-desciption ul li');
+    // Hide all product details initially
+    styleDec.forEach((content, index) => {
+        if (index !== 0) { // Show only the first one
+            content.classList.remove('active-dec');
+        } else {
+            content.classList.add('active-dec');
+        }
+    });
 
-styleCate.forEach( (cateItem, index) => {
-    cateItem.addEventListener('click', () => {
-       
-        styleDec.forEach( content => content.classList.remove('active-dec'));
+    styleCate.forEach((cateItem, index) => {
+        cateItem.addEventListener('click', () => {
+            // Remove active class from all categories
+            styleCate.forEach(item => item.classList.remove('active-color'));
+            // Add active class to the clicked category
+            cateItem.classList.add('active-color');
 
-        styleDec[index].classList.add('active-dec');
-        
-    })
-})
+            // Hide all product details
+            styleDec.forEach(content => content.classList.remove('active-dec'));
+            // Show the selected product detail
+            styleDec[index].classList.add('active-dec');
+        });
+    });
+});
+
+
+
+
+
 
 

@@ -26,7 +26,6 @@
 <section class="section-product padding-t-100">
     <div class="container">
         <div class="row">
-
             <div class="col-lg-12 col-12 md-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">
                 <div class="row mb-minus-24">
                     <div class="col-md-5 col-12 mb-24">
@@ -35,77 +34,17 @@
                                 <div class="slider slider-for">
                                     <div class="slider-banner-image">
                                         <div class="zoom-image-hover">
-                                            <img src="{% static 'img/product/1.jpg' %}" alt="product-tab-1"
-                                                class="product-image">
+                                            <img src="{{ product.photo_url.url }}" alt="{{ product.name }}" class="product-image">
                                         </div>
                                     </div>
-                                    <div class="slider-banner-image">
-                                        <div class="zoom-image-hover">
-                                            <img src="{% static 'img/product/2.jpg' %}" alt="product-tab-2"
-                                                class="product-image">
-                                        </div>
-                                    </div>
-                                    <div class="slider-banner-image">
-                                        <div class="zoom-image-hover">
-                                            <img src="{% static 'img/product/3.jpg' %}" alt="product-tab-3"
-                                                class="product-image">
-                                        </div>
-                                    </div>
-                                    <div class="slider-banner-image">
-                                        <div class="zoom-image-hover">
-                                            <img src="{% static 'img/product/4.jpg' %}" alt="product-tab-1"
-                                                class="product-image">
-                                        </div>
-                                    </div>
-                                    <div class="slider-banner-image">
-                                        <div class="zoom-image-hover">
-                                            <img src="{% static 'img/product/5.jpg' %}" alt="product-tab-2"
-                                                class="product-image">
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="slider slider-nav thumb-image">
-                                    <div class="thumbnail-image">
-                                        <div class="thumbImg">
-                                            <img src="{% static 'img/product/1.jpg' %}" alt="product-tab-1">
-                                        </div>
-                                    </div>
-                                    <div class="thumbnail-image">
-                                        <div class="thumbImg">
-                                            <img src="{% static 'img/product/2.jpg' %}" alt="product-tab-2">
-                                        </div>
-                                    </div>
-                                    <div class="thumbnail-image">
-                                        <div class="thumbImg">
-                                            <img src="{% static 'img/product/3.jpg' %}" alt="product-tab-3">
-                                        </div>
-                                    </div>
-                                    <div class="thumbnail-image">
-                                        <div class="thumbImg">
-                                            <img src="{% static 'img/product/4.jpg' %}" alt="product-tab-1">
-                                        </div>
-                                    </div>
-                                    <div class="thumbnail-image">
-                                        <div class="thumbImg">
-                                            <img src="{% static 'img/product/5.jpg' %}" alt="product-tab-2">
-                                        </div>
-                                    </div>
-                                    <div class="thumbnail-image">
-                                        <div class="thumbImg">
-                                            <img src="{% static 'img/product/6.jpg' %}" alt="product-tab-3">
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-7 col-12 mb-24">
                         <div class="cr-size-and-weight-contain">
-                            <h2 class="heading">Seeds Of Change Oraganic Quinoa, Brown</h2>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. In, iure minus error
-                                doloribus saepe natus?</p>
+                            <h2 class="heading">{{ product.product_name }}</h2>
+                            <p>{{ product.description }}</p>
                         </div>
                         <div class="cr-size-and-weight">
                             <div class="cr-review-star">
@@ -119,77 +58,39 @@
                                 <p>( 75 Review )</p>
                             </div>
 
-
                             <div class="cr-size-weight">
-                                <h5><span>Packaging</span> :</h5>
-                                <div class="cr-kg">
-                                    <ul>
-                                        <li>1kg</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="cr-size-weight">
-                                <h5><span>Category Name</span> :</h5>
+                                <h5><span>Manufacturing Code</span> :</h5>
                                 <div class="cr-kg cr-list">
                                     <ul>
-                                        <li class="active-color">SLI-10S Straight insert with metal grip</li>
-                                        <li>SLI-10S Straight insert</li>
-
+                                        {% for product_variation in product_variations %}
+                                        <li class="{% if forloop.first %}active-color{% endif %}">{{ product_variation.manufacturer_code }}</li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
 
                             <div class="style-desciption">
-
                                 <ul>
+                                    {% for product_variation in product_variations %}
                                     <li class="active-dec">
-
-                                        <div class="item-code">
-                                            <strong>Item # :</strong> Ac-908001
+                                        <div class="pricing_ck">
+                                            <h5><span>Packaging</span> :</h5> <span>{{ product_variation.item_pack }}</span>
                                         </div>
+
                                         <div class="description">
                                             <h5><span>Description</span> :</h5>
 
-                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi error
-                                                veritatis distinctio nam dolore illo tempore, accusamus fugiat
-                                                quidem quod dignissimos eligendi. Blanditiis dolorum quibusdam unde
-                                                provident adipisci quam quod.</p>
-
-                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi error
-                                                veritatis distinctio nam dolore illo tempore, accusamus fugiat
-                                                quidem quod dignissimos eligendi. Blanditiis dolorum quibusdam unde
-                                                provident adipisci quam quod.</p>
+                                            <p>{{ product_variation.item_description }}</p>
 
                                         </div>
                                         <div class="cr-product-price">
-                                            <span class="new-price">$120.25</span>
-                                            <span class="old-price">$123.25</span>
+                                            <span class="new-price">${{ product_variation.item_price }}</span>
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="item-code">
-                                            <strong>Item # :</strong> Ac-908001
-                                        </div>
-                                        <div class="description">
-                                            <h5><span>Description</span> :</h5>
-
-                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Animi error
-                                                veritatis distinctio nam dolore illo tempore, accusamus fugiat
-                                                quidem quod dignissimos eligendi. Blanditiis dolorum quibusdam unde
-                                                provident adipisci quam quod.</p>
-
-                                        </div>
-
-                                        <div class="cr-product-price">
-                                            <span class="new-price">$120.25</span>
-                                            <span class="old-price">$123.25</span>
-                                        </div>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
-
-
                             </div>
+
                             <div class="cr-add-card">
                                 <div class="cr-qty-main">
                                     <button type="button" id="add" class="plus">+</button>
@@ -212,11 +113,13 @@
                                 data-bs-target="#description" type="button" role="tab" aria-controls="description"
                                 aria-selected="true">Description</button>
                         </li>
+                        {% if product.product_details.items %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="additional-tab" data-bs-toggle="tab"
                                 data-bs-target="#additional" type="button" role="tab" aria-controls="additional"
                                 aria-selected="false">Information</button>
                         </li>
+                        {% endif %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review"
                                 type="button" role="tab" aria-controls="review"
@@ -228,42 +131,24 @@
                             aria-labelledby="description-tab">
                             <div class="cr-tab-content">
                                 <div class="cr-description">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error in vero
-                                        sapiente odio, error dolore vero temporibus consequatur, nobis veniam odit
-                                        dignissimos consectetur quae in perferendis
-                                        doloribusdebitis corporis, eaque dicta, repellat amet, illum adipisci vel
-                                        perferendis dolor! Quis vel consequuntur repellat distinctio rem. Corrupti
-                                        ratione alias odio, error dolore temporibus consequatur, nobis veniam odit
-                                        laborum dignissimos consectetur quae vero in perferendis provident quis.</p>
+                                    <p>{{ product.description }}</p>
                                 </div>
-                                <h4 class="heading">Packaging & Delivery</h4>
+                                <!-- <h4 class="heading">Packaging & Delivery</h4>
                                 <div class="cr-description">
                                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error in vero
                                         perferendis dolor! Quis vel consequuntur repellat distinctio rem. Corrupti
                                         ratione alias odio, error dolore temporibus consequatur, nobis veniam odit
                                         laborum dignissimos consectetur quae vero in perferendis provident quis.</p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="tab-pane fade" id="additional" role="tabpanel" aria-labelledby="additional-tab">
                             <div class="cr-tab-content">
-                                <div class="cr-description">
-                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error in vero
-                                        sapiente
-                                        doloribus debitis corporis, eaque dicta, repellat amet, illum adipisci vel
-                                        perferendis dolor! Quis vel consequuntur repellat distinctio rem. Corrupti
-                                        ratione alias odio, error dolore temporibus consequatur, nobis veniam odit
-                                        laborum dignissimos consectetur quae vero in perferendis provident quis.</p>
-                                </div>
                                 <div class="list">
                                     <ul>
-                                        <li><label>Brand <span>:</span></label>ESTA BETTERU CO</li>
-                                        <li><label>Flavour <span>:</span></label>Super Saver Pack</li>
-                                        <li><label>Diet Type <span>:</span></label>Vegetarian</li>
-                                        <li><label>Weight <span>:</span></label>200 Grams</li>
-                                        <li><label>Speciality <span>:</span></label>Gluten Free, Sugar Free</li>
-                                        <li><label>Info <span>:</span></label>Egg Free, Allergen-Free</li>
-                                        <li><label>Items <span>:</span></label>1</li>
+                                        {% for key,value in product.product_details.items %}
+                                        <li><label>{{ key|title }} <span>:</span></label>{{ value }}</li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
@@ -352,8 +237,7 @@
                         <h2>Popular Products</h2>
                     </div>
                     <div class="cr-banner-sub-title">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et viverra maecenas accumsan lacus vel facilisis. </p>
+                        <p>Explore our extensive range of popular products that cater to your every need and preference. From trending items to customer favorites, we've got you covered. </p>
                     </div>
                 </div>
             </div>
@@ -361,11 +245,13 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="cr-popular-product">
+                {% for related_product in related_products %}
+
                     <div class="slick-slide">
                         <div class="cr-product-card">
                             <div class="cr-product-image">
                                 <div class="cr-image-inner zoom-image-hover">
-                                    <img src="{% static 'img/product/1.jpg' %}" alt="product-1">
+                                    <img src="{{ related_product.photo_url.url }}" alt="product-1">
                                 </div>
                                 <div class="cr-side-view">
                                     <a href="javascript:void(0)" class="wishlist">
@@ -376,13 +262,13 @@
                                         <i class="ri-eye-line"></i>
                                     </a>
                                 </div>
-                                <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
-                                        <i class="ri-shopping-bag-line"></i>
-                                    </a> -->
+                                <a class="cr-shopping-bag" href="javascript:void(0)">
+                                    <i class="ri-shopping-bag-line"></i>
+                                </a>
                             </div>
                             <div class="cr-product-details">
                                 <div class="cr-brand">
-                                    <a href="product-detail.php">Snacks</a>
+                                    <a href="{{ product.get_url }}">{{ related_product.subcategory }}</a>
                                     <div class="cr-star">
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-fill"></i>
@@ -392,168 +278,13 @@
                                         <p>(4.5)</p>
                                     </div>
                                 </div>
-                                <a href="product-detail.php" class="title">Best snakes with hazel nut
-                                    mix pack 200gm</a>
-                                    <h6>Crosstex Horseshoe </h6>
-                                <p class="cr-price"><span class="new-price">$120.25</span> </p>
+                                <a href="{{ product.get_url }}" class="title">{{ related_product.brand }}</a>
+                                <h6>{{ related_product.product_name }}</h6>
+                                <p class="cr-price"><span class="new-price">${{ related_product.min_price }}</span> </p>
                             </div>
                         </div>
                     </div>
-                    <div class="slick-slide">
-                        <div class="cr-product-card">
-                            <div class="cr-product-image">
-                                <div class="cr-image-inner zoom-image-hover">
-                                    <img src="{% static 'img/product/2.jpg' %}" alt="product-1">
-                                </div>
-                                <div class="cr-side-view">
-                                    <a href="javascript:void(0)" class="wishlist">
-                                        <i class="ri-heart-line"></i>
-                                    </a>
-                                    <a class="model-oraganic-product" data-bs-toggle="modal" href="#quickview"
-                                        role="button">
-                                        <i class="ri-eye-line"></i>
-                                    </a>
-                                </div>
-                                <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
-                                        <i class="ri-shopping-bag-line"></i>
-                                    </a> -->
-                            </div>
-                            <div class="cr-product-details">
-                                <div class="cr-brand">
-                                    <a href="product-detail.php">Snacks</a>
-                                    <div class="cr-star">
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <p>(5.0)</p>
-                                    </div>
-                                </div>
-                                <a href="product-detail.php" class="title">Sweet snakes crunchy nut
-                                    mix 250gm
-                                    pack</a>
-                                <h6>Crosstex Horseshoe </h6>
-                                <p class="cr-price"><span class="new-price">$100.00</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slick-slide">
-                        <div class="cr-product-card">
-                            <div class="cr-product-image">
-                                <div class="cr-image-inner zoom-image-hover">
-                                    <img src="{% static 'img/product/3.jpg' %}" alt="product-1">
-                                </div>
-                                <div class="cr-side-view">
-                                    <a href="javascript:void(0)" class="wishlist">
-                                        <i class="ri-heart-line"></i>
-                                    </a>
-                                    <a class="model-oraganic-product" data-bs-toggle="modal" href="#quickview"
-                                        role="button">
-                                        <i class="ri-eye-line"></i>
-                                    </a>
-                                </div>
-                                <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
-                                        <i class="ri-shopping-bag-line"></i>
-                                    </a> -->
-                            </div>
-                            <div class="cr-product-details">
-                                <div class="cr-brand">
-                                    <a href="product-detail.php">Snacks</a>
-                                    <div class="cr-star">
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-line"></i>
-                                        <p>(4.5)</p>
-                                    </div>
-                                </div>
-                                <a href="product-detail.php" class="title">Best snakes with hazel nut
-                                    mix pack 200gm</a>
-                                <h6>Crosstex Horseshoe </h6>
-                                <p class="cr-price"><span class="new-price">$120.25</span> </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slick-slide">
-                        <div class="cr-product-card">
-                            <div class="cr-product-image">
-                                <div class="cr-image-inner zoom-image-hover">
-                                    <img src="{% static 'img/product/4.jpg' %}" alt="product-1">
-                                </div>
-                                <div class="cr-side-view">
-                                    <a href="javascript:void(0)" class="wishlist">
-                                        <i class="ri-heart-line"></i>
-                                    </a>
-                                    <a class="model-oraganic-product" data-bs-toggle="modal" href="#quickview"
-                                        role="button">
-                                        <i class="ri-eye-line"></i>
-                                    </a>
-                                </div>
-                                <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
-                                        <i class="ri-shopping-bag-line"></i>
-                                    </a> -->
-                            </div>
-                            <div class="cr-product-details">
-                                <div class="cr-brand">
-                                    <a href="product-detail.php">Snacks</a>
-                                    <div class="cr-star">
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <p>(5.0)</p>
-                                    </div>
-                                </div>
-                                <a href="product-detail.php" class="title">Sweet snakes crunchy nut
-                                    mix 250gm
-                                    pack</a>
-                                <h6>Crosstex Horseshoe </h6>
-                                <p class="cr-price"><span class="new-price">$100.00</span> </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slick-slide">
-                        <div class="cr-product-card">
-                            <div class="cr-product-image">
-                                <div class="cr-image-inner zoom-image-hover">
-                                    <img src="{% static 'img/product/5.jpg' %}" alt="product-1">
-                                </div>
-                                <div class="cr-side-view">
-                                    <a href="javascript:void(0)" class="wishlist">
-                                        <i class="ri-heart-line"></i>
-                                    </a>
-                                    <a class="model-oraganic-product" data-bs-toggle="modal" href="#quickview"
-                                        role="button">
-                                        <i class="ri-eye-line"></i>
-                                    </a>
-                                </div>
-                                <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
-                                        <i class="ri-shopping-bag-line"></i>
-                                    </a> -->
-                            </div>
-                            <div class="cr-product-details">
-                                <div class="cr-brand">
-                                    <a href="product-detail.php">Snacks</a>
-                                    <div class="cr-star">
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <p>(5.0)</p>
-                                    </div>
-                                </div>
-                                <a href="product-detail.php" class="title">Sweet snakes crunchy nut
-                                    mix 250gm
-                                    pack</a>
-                                <h6>Crosstex Horseshoe </h6>
-                                <p class="cr-price"><span class="new-price">$100.00</span> </p>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -562,8 +293,6 @@
 
 
 {% endblock %}
-
-
 
 </body>
 

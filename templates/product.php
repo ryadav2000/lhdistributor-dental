@@ -117,7 +117,7 @@
                             </div>
                             <div class="cr-product-details">
                                 <div class="cr-brand">
-                                    <a href="product-detail.php">{{ product.category }}</a>
+                                    <a href="{{ product.get_url }}">{{ product.category }}</a>
                                     <div class="cr-star">
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-fill"></i>
@@ -127,7 +127,7 @@
                                         <p>(4.5)</p>
                                     </div>
                                 </div>
-                                <a href="product-detail.php" class="title">{{ product.brand }}</a>
+                                <a href="{{ product.get_url }}" class="title">{{ product.brand }}</a>
                                 <h6>{{ product.product_name }}</h6>
                                 <p class="cr-price"><span class="new-price">${{ product.price }}</span></p>
                             </div>
@@ -137,13 +137,6 @@
                     <p class="text-center">No products available.</p>
                     {% endfor %}
                 </div>
-
-
-
-
-
-
-
                 {% if products %}
                 <nav aria-label="..." class="cr-pagination">
                     <ul class="pagination">

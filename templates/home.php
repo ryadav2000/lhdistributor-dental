@@ -240,7 +240,7 @@
                                 </div>
                                 <div class="cr-product-details">
                                     <div class="cr-brand">
-                                        <a href="#">{{ product.subcategory }}</a>
+                                        <a href="{{ product.get_url }}">{{ product.subcategory }}</a>
                                         <div class="cr-star">
                                             <i class="ri-star-fill"></i>
                                             <i class="ri-star-fill"></i>
@@ -251,8 +251,10 @@
                                         </div>
                                     </div>
 
-                                    <a href="#" class="title">{{ product.brand }}</a>
+                                    <a href="{{ product.get_url }}" class="title">{{ product.brand }}</a>
+                                    <a href="{{ product.get_url }}">
                                     <h6>{{ product.product_name }} </h6>
+                                    </a>
                                     <p class="cr-price"><span class="new-price">$9.99</span> </p>
                                 </div>
                             </div>
