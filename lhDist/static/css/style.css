@@ -9710,3 +9710,17 @@ margin-top: 20px;
   align-items: center;
   gap: 15px;
 }
+.b_details{
+  border: none;
+  padding: 8px 30px;
+  border-radius: 4px;
+  background: #484848;
+  color: #fff;
+  font-size: 16px;
+  display: inline-block;
+  transition: all .2s linear;
+}
+
+.b_details:hover{
+  background-color: #000;
+}

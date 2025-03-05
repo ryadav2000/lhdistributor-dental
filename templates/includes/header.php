@@ -11,12 +11,12 @@
                         <img src="{% static 'img/logo/logo.png' %}" alt="logo" class="logo">
                         <img src="{% static 'img/logo/dark-logo.png' %}" alt="logo" class="dark-logo">
                     </a>
-                    <form class="cr-search">
-                        <input class="search-input" type="text" placeholder="Search For items...">
+                    <form action="{% url 'search' %}" class="cr-search" method="GET">
+                        <input class="search-input" type="text" name="keyword" placeholder="Search For items...">
 
-                        <a href="javascript:void(0)" class="search-btn">
+                        <button type="submit" class="search-btn">
                             <i class="ri-search-line"></i>
-                        </a>
+                        </button>
                     </form>
                     <div class="cr-right-bar">
 

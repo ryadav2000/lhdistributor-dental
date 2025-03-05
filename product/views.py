@@ -4,6 +4,10 @@ from productitem.models import ProductItem
 from category.models import Category, SubCategory
 from django.db.models import Q, Min
 
+
+#Paginator Modules
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+
 # Create your views here.
 def all_product_data(request):
     categories = Category.objects.filter(activatedstatus=1)
@@ -27,8 +31,14 @@ def all_product_data(request):
     for product in products:
         product.price = product.items.first().item_price if product.items.exists() else None
 
+    products = products.order_by('product_name')
+
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+
     context = {
-        'products': products,
+        'products': paged_products,
         'product_count': product_count,
         'categories': categories,
         'selected_category': selected_category,
@@ -48,11 +58,18 @@ def filter_by_subcategory(request, subcategory_slug):
     # Fetch all subcategories related to the parent category
     subcategories = SubCategory.objects.filter(Category=category, activatedstatus=True)
 
+    products = products.order_by('product_name')
+
     for product in products:
         product.price = product.items.first().item_price if product.items.exists() else None 
 
+    
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+
     context = {
-        'products': products,
+        'products': paged_products,
         'subcategory': subcategory,
         'selected_category': category,  # Pass the parent category
         'subcategories': subcategories,  # Pass all subcategories of the parent category
@@ -99,5 +116,40 @@ def product_detail(request, category_slug, subcategory_slug, product_slug):
     print(related_products)
 
     return render(request, 'product-detail.php', context)
+
+
+def search(request):
+    keyword = request.GET.get('keyword', '').strip()  # Get keyword safely
+
+    products = Product.objects.filter(activatedstatus=True).select_related("brand", "category", "subcategory").prefetch_related("items")
+
+    if keyword:
+        products = products.filter(
+            Q(description__icontains=keyword) |
+            Q(product_name__icontains=keyword) |
+            Q(category__cat_name__icontains=keyword) |   # Search in Category name
+            Q(subcategory__subcat_name__icontains=keyword) |  # Search in Subcategory name
+            Q(brand__brand_name__icontains=keyword)  # Search in Brand name
+        )
+
+    product_count = products.count()
+
+    products = products.order_by('product_name')
+
+    for product in products:
+        product.price = product.items.first().item_price if product.items.exists() else None  
+
+
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+
+    context = {
+        'products': paged_products,
+        'product_count': product_count,
+        'keyword': keyword,
+    }
+
+    return render(request, 'product.php', context)
 
 

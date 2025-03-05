@@ -234,9 +234,9 @@
                                             <i class="ri-eye-line"></i>
                                         </a>
                                     </div>
-                                    <a class="cr-shopping-bag" href="javascript:void(0)">
+                                    <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
                                         <i class="ri-shopping-bag-line"></i>
-                                    </a>
+                                    </a> -->
                                 </div>
                                 <div class="cr-product-details">
                                     <div class="cr-brand">
@@ -253,7 +253,8 @@
 
                                     <a href="{{ product.get_url }}" class="title">{{ product.brand }}</a>
                                     <a href="{{ product.get_url }}">
-                                    <h6>{{ product.product_name }} </h6>
+                                    <h6 class="mt-2 mb-2">{{ product.product_name }} </h6>
+                                    <a href="{{ product.get_url }}" class="mt-3 b_details">Details</a>
                                     </a>
                                     <p class="cr-price"><span class="new-price">$9.99</span> </p>
                                 </div>
