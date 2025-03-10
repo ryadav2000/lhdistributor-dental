@@ -9724,3 +9724,28 @@ margin-top: 20px;
 .b_details:hover{
   background-color: #000;
 }
+
+.cr-kg li {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cr-kg li.active-color {
+    background-color: orange;
+    border-color: orange;
+    color: white;
+}
+
+.cr-kg li input[type="radio"] {
+    display: none;
+}
+
+.cr-kg li label {
+    margin-left: 5px;
+    cursor: pointer;
+}

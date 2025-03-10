@@ -113,7 +113,7 @@ def product_detail(request, category_slug, subcategory_slug, product_slug):
         'related_products': related_products
     }
 
-    print(related_products)
+    # print(related_products)
 
     return render(request, 'product-detail.php', context)
 

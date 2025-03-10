@@ -48,39 +48,49 @@
                                         <tr>
                                             <th>Product</th>
                                             <th>price</th>
+                                            <th>Item code</th>
                                             <th class="text-center">Quantity</th>
                                             <th>Total</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
+                                    {% for cart_item in cart_items %}
                                     <tbody>
                                         <tr>
                                             <td class="cr-cart-name">
-                                                <a href="javascript:void(0)">
-                                                    <img src="{% static 'img/product/1.jpg' %}" alt="product-1"
+                                                <a href="{{ cart_item.product_item.product.get_url }}">
+                                                    <img src="{{ cart_item.product_item.product.photo_url.url }}" alt="{{ cart_item.product_name }}"
                                                         class="cr-cart-img">
-                                                    Organic Lemon
+                                                    {{ cart_item.item_description }}
                                                 </a>
                                             </td>
                                             <td class="cr-cart-price">
-                                                <span class="amount">$56.00</span>
+                                                <span class="amount">${{ cart_item.item_price }}</span>
+                                            </td>
+                                            <td class="cr-cart-price">
+                                                <span class="amount">{{ cart_item.manufacturer_code }}</span>
                                             </td>
                                             <td class="cr-cart-qty">
                                                 <div class="cart-qty-plus-minus">
-                                                    <button type="button" class="plus">+</button>
-                                                    <input type="text" placeholder="." value="1" minlength="1"
+                                                    <a href="{% url 'increase_cart_quantity' cart_item.id %}" class="plus">+</a>
+                                                    <input type="text" readonly value="{{ cart_item.quantity }}" minlength="1"
                                                         maxlength="20" class="quantity">
-                                                    <button type="button" class="minus">-</button>
+                                                    <a href="{% url 'decrease_cart_quantity' cart_item.id %}" class="minus">-</a>
                                                 </div>
                                             </td>
-                                            <td class="cr-cart-subtotal">$56.00</td>
+                                            <td class="cr-cart-subtotal">${{ cart_item.subtotal }}</td>
                                             <td class="cr-cart-remove">
-                                                <a href="javascript:void(0)">
+                                                <a href="{% url 'delete_cart_item' cart_item.id %}" onclick="return confirm('Are you sure you want to remove this item?')">
                                                     <i class="ri-delete-bin-line"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                     </tbody>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5">Your cart is empty.</td>
+                                    </tr>
+                                    {% endfor %}
                                 </table>
                             </div>
                             <div class="row">

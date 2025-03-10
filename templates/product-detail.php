@@ -27,85 +27,96 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-12 md-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">
-                <div class="row mb-minus-24">
-                    <div class="col-md-5 col-12 mb-24">
-                        <div class="vehicle-detail-banner banner-content clearfix">
-                            <div class="banner-slider">
-                                <div class="slider slider-for">
-                                    <div class="slider-banner-image">
-                                        <div class="zoom-image-hover">
-                                            <img src="{{ product.photo_url.url }}" alt="{{ product.name }}" class="product-image">
+                <form method="POST" action="{% url 'add_to_cart' product.id %}" onsubmit="ensureVariationSelected(event)">
+                    {% csrf_token %}
+                    <div class="row mb-minus-24">
+                        <div class="col-md-5 col-12 mb-24">
+                            <div class="vehicle-detail-banner banner-content clearfix">
+                                <div class="banner-slider">
+                                    <div class="slider slider-for">
+                                        <div class="slider-banner-image">
+                                            <div class="zoom-image-hover">
+                                                <img src="{{ product.photo_url.url }}" alt="{{ product.name }}" class="product-image">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-7 col-12 mb-24">
-                        <div class="cr-size-and-weight-contain">
-                            <h2 class="heading">{{ product.product_name }}</h2>
-                            <p>{{ product.description }}</p>
-                        </div>
-                        <div class="cr-size-and-weight">
-                            <div class="cr-review-star">
-                                <div class="cr-star">
-                                    <i class="ri-star-fill"></i>
-                                    <i class="ri-star-fill"></i>
-                                    <i class="ri-star-fill"></i>
-                                    <i class="ri-star-fill"></i>
-                                    <i class="ri-star-fill"></i>
-                                </div>
-                                <p>( 75 Review )</p>
+                        <div class="col-md-7 col-12 mb-24">
+                            <div class="cr-size-and-weight-contain">
+                                <h2 class="heading">{{ product.product_name }}</h2>
+                                <p>{{ product.description }}</p>
                             </div>
+                            <div class="cr-size-and-weight">
+                                <div class="cr-review-star">
+                                    <div class="cr-star">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                    <p>( 75 Review )</p>
+                                </div>
 
-                            <div class="cr-size-weight">
-                                <h5><span>Manufacturing Code</span> :</h5>
-                                <div class="cr-kg cr-list">
+                                <div class="cr-size-weight">
+                                    <h5><span>Manufacturing Code</span> :</h5>
+                                    <div class="cr-kg cr-list">
+                                        <ul class="cr-kg cr-list">
+                                            {% for product_variation in product_variations %}
+                                            <li onclick="updateSelection(this)" data-id="{{ product_variation.id }}"
+                                                class="{% if forloop.first %}active-color{% endif %}">
+
+                                                <!-- Ensure the radio button exists inside the <li> -->
+                                                <input type="radio" name="product_item_id" value="{{ product_variation.id }}"
+                                                    {% if forloop.first %}checked{% endif %}>
+
+                                                <label>{{ product_variation.manufacturer_code }}</label>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                                <div class="style-desciption">
                                     <ul>
                                         {% for product_variation in product_variations %}
-                                        <li class="{% if forloop.first %}active-color{% endif %}">{{ product_variation.manufacturer_code }}</li>
+                                        <li class="active-dec">
+                                            <div class="pricing_ck">
+                                                <h5><span>Packaging</span> :</h5> <span>{{ product_variation.item_pack }}</span>
+                                            </div>
+
+                                            <div class="description">
+                                                <h5><span>Description</span> :</h5>
+
+                                                <p>{{ product_variation.item_description }}</p>
+
+                                            </div>
+                                            <div class="cr-product-price">
+                                                <span class="new-price">${{ product_variation.item_price }}</span>
+                                            </div>
+                                        </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
-                            </div>
-
-                            <div class="style-desciption">
-                                <ul>
-                                    {% for product_variation in product_variations %}
-                                    <li class="active-dec">
-                                        <div class="pricing_ck">
-                                            <h5><span>Packaging</span> :</h5> <span>{{ product_variation.item_pack }}</span>
-                                        </div>
-
-                                        <div class="description">
-                                            <h5><span>Description</span> :</h5>
-
-                                            <p>{{ product_variation.item_description }}</p>
-
-                                        </div>
-                                        <div class="cr-product-price">
-                                            <span class="new-price">${{ product_variation.item_price }}</span>
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-
-                            <div class="cr-add-card">
-                                <div class="cr-qty-main">
-                                    <button type="button" id="add" class="plus">+</button>
-                                    <input type="text" placeholder="." value="1" minlength="1" maxlength="20"
-                                        class="quantity">
-                                    <button type="button" id="sub" class="minus">-</button>
+                                <input type="hidden" id="selected-product-item-id" name="product_item_id">
+                                <div class="cr-add-card">
+                                    <!-- Quantity selection -->
+                                    <div class="cr-qty-main">
+                                        <button type="button" class="minus">-</button>
+                                        <input type="text" id="quantity-input" name="quantity" value="1" class="quantity">
+                                        <button type="button" class="plus">+</button>
+                                    </div>
+                                    <div class="cr-add-button">
+                                        <button type="submit" class="cr-button cr-shopping-bag">Add to cart</button>
+                                    </div>
                                 </div>
-                                <div class="cr-add-button">
-                                    <button type="button" class="cr-button cr-shopping-bag">Add to cart</button>
-                                </div>
-
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
                 <div class="cr-paking-delivery">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -245,7 +256,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="cr-popular-product">
-                {% for related_product in related_products %}
+                    {% for related_product in related_products %}
 
                     <div class="slick-slide">
                         <div class="cr-product-card">
@@ -268,7 +279,7 @@
                             </div>
                             <div class="cr-product-details">
                                 <div class="cr-brand">
-                                    <a href="{{ product.get_url }}">{{ related_product.subcategory }}</a>
+                                    <a href="{{ related_product.get_url }}">{{ related_product.subcategory }}</a>
                                     <div class="cr-star">
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-fill"></i>
@@ -278,8 +289,9 @@
                                         <p>(4.5)</p>
                                     </div>
                                 </div>
-                                <a href="{{ product.get_url }}" class="title">{{ related_product.brand }}</a>
-                                <h6>{{ related_product.product_name }}</h6>
+                                <a href="{{ related_product.get_url }}" class="title">{{ related_product.brand }}</a>
+                                <h6 class="mt-2 mb-2">{{ related_product.product_name }}</h6>
+                                <a href="{{ related_product.get_url }}" class="mt-3 b_details">Details</a>
                                 <p class="cr-price"><span class="new-price">${{ related_product.min_price }}</span> </p>
                             </div>
                         </div>
@@ -294,6 +306,7 @@
 
 {% endblock %}
 
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 
 </html>

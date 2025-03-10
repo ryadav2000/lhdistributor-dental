@@ -113,7 +113,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="./">
+                                <a class="nav-link" href="{% url 'home' %}">
                                     Home
                                 </a>
                             </li>
@@ -134,7 +134,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{% url 'contactus' %}">
                                     Contact Us
                                 </a>
                             </li>
@@ -142,7 +142,6 @@
                     </div>
                 </nav>
                 <div class="cr-calling">
-
                     <a href="tel:5308596003">+1 (530) 859-6003</a>
                 </div>
             </div>
