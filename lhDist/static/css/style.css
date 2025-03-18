@@ -9749,3 +9749,8 @@ margin-top: 20px;
     margin-left: 5px;
     cursor: pointer;
 }
+
+.alert {
+  padding: 15px;
+  border-radius: 5px;
+}

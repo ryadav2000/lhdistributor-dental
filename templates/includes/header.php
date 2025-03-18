@@ -35,15 +35,27 @@
                                     <span class="user-login"> <i class="ri-user-3-line"></i></span>
                                 </a>
                                 <ul class="dropdown-menu">
+                                    {% if user.id is None %}
                                     <li>
-                                        <a class="dropdown-item" href="register.php">Register</a>
+                                        <a class="dropdown-item" href="{% url 'register' %}">Register</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="checkout.php">Checkout</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="login.php">Login</a>
+                                        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
                                     </li>
+                                    {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="checkout.php">Checkout</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                    </li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         </ul>
