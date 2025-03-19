@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+# OTP Modules
+from django.utils.timezone import now, timedelta
+import random
+#from .models import Account # Import custom account model 
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, company_name, first_name, last_name, username, email, address_line, city, state, postal_code, country, password=None, phone_number=None, fax_number=None):
@@ -94,3 +98,25 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+
+
+# OTP Modules
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False) # Track if OTP was used
+
+    def generate_otp(self):
+        return str(random.randint(100000, 999999)) # Generate a 6-digit OTP
+    
+    def is_valid(self):
+        """Check if OTP is still valid (expires after 10 minutes and is not used)."""
+        return now() - self.created_at < timedelta(minutes=10) and not self.is_used
+    
+    def mark_used(self):
+         """Mark OTP as used."""
+         self.is_used = True
+         self.save()
+

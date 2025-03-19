@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import RegistrationForm, Account
+from .forms import RegistrationForm
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate, login as auth_login
 
@@ -15,6 +15,14 @@ from django.core.mail import EmailMessage
 # Activate view
 from django.utils.encoding import force_str
 
+# OTP Functionality
+import random
+from .models import Account, PasswordResetOTP
+from django.utils.timezone import now
+from datetime import timedelta
+
+# Testing
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -102,7 +110,7 @@ def login_view(request):  # Changed function name to login_view
         if user is not None:
             auth_login(request, user)  # Use Django's login function
             messages.success(request, "Login successful!")
-            return redirect("home")  
+            return redirect("dashboard")  
         else:
             messages.error(request, "Invalid login credentials")
             return redirect("login")
@@ -136,5 +144,151 @@ def activate(request, uidb64, token):
 @login_required(login_url='login')
 def dashboard(request):
     return render(request, 'accounts/dashboard.php')
+
+
+
+
+# OTP
+def request_opt(request):
+    if request.method == 'POST':
+        email = request.POST.get("email")
+        try:
+            user = Account.objects.get(email=email)
+            otp = str(random.randint(100000, 999999 )) # Generate 6-digit otp
+
+            # Save otp in database
+            PasswordResetOTP.objects.create(user=user, otp=otp)
+
+            # Send OTP via Email using EmailMessage
+            current_site = get_current_site(request)
+            mail_subject = "Your Passwod  Reset Otp"
+            message = render_to_string('accounts/password_reset_otp_email.html', {
+                'user': user,
+                "domain": current_site.domain,
+                "otp": otp
+            })
+            from_email = "Lh Distribution <no-reply@lhdistributors.com>"
+            to_email = user.email
+            email_message = EmailMessage(mail_subject, message, from_email, to=[to_email])
+            email_message.content_subtype = "html"
+            email_message.send()
+
+            request.session["reset_email"] = email  # Store email in session
+            messages.success(request, "An OTP has been sent to your email.")
+            return redirect("verify_otp")
+        
+        except Account.DoesNotExist:
+            messages.error(request, "No acount found with this email.")
+            return redirect('request_otp')
+    else:
+        return render(request, 'accounts/request_otp.php')
+
+
+def verify_otp(request):
+    if request.method == "POST":
+        email = request.session.get("reset_email")
+        otp_entered = request.POST.get("otp")
+
+        if not email:
+            messages.error(request, "Session expired! Please request a new OTP.")
+            return redirect('request_otp')
+        
+        if not otp_entered:
+            messages.error(request, "Please enter the OTP.")
+            return redirect('verify_otp')
+
+        # Fetch OTP attempts from session
+        attempts = request.session.get("otp_attempts", 0)
+        first_attempt_time = request.session.get("otp_attempt_time")
+
+        # Reset OTP attempts after 10 minutes
+        if first_attempt_time:
+            try:
+                first_attempt_time = now() - timedelta(minutes=10)
+                if now() >= first_attempt_time:
+                    request.session["otp_attempts"] = 0  # Reset attempt counter
+                    request.session["otp_attempt_time"] = None  # Clear timestamp
+                    request.session.modified = True  # Force session update
+            except Exception:
+                pass  # Avoid crashes if there's an issue with time parsing
+
+        # Block user if 5 failed attempts within 10 minutes
+        if attempts >= 5:
+            messages.error(request, "Too many failed attempts. Please try again after 10 minutes.")
+            return redirect('request_otp')
+
+        try:
+            user = Account.objects.get(email=email)
+            otp_record = PasswordResetOTP.objects.filter(user=user).latest('created_at')
+
+            if otp_record.otp == otp_entered and otp_record.is_valid():
+                otp_record.mark_used()  # Mark OTP as used
+                request.session["verified_email"] = email  # Store verified email
+                
+                # Reset attempts on success
+                request.session.pop("otp_attempts", None)  # Remove the key
+                request.session.pop("otp_attempt_time", None)  # Remove timestamp
+                request.session.modified = True  # Ensure session update
+
+                messages.success(request, "OTP verified successfully! Please reset your password.")
+                return redirect("reset_password")
+
+            # If OTP is incorrect, increase the attempt count
+            request.session["otp_attempts"] = attempts + 1
+            request.session.modified = True  # Ensure session update
+
+            # Store the timestamp of the first failed attempt
+            if not first_attempt_time:
+                request.session["otp_attempt_time"] = now().isoformat()  # Save as string for session
+                request.session.modified = True  # Ensure session update
+
+            messages.error(request, "Invalid or expired OTP. Please try again.")
+            return redirect("verify_otp")
+
+        except (Account.DoesNotExist, PasswordResetOTP.DoesNotExist):
+            messages.error(request, "Invalid request. Try again.")
+            return redirect("request_otp")
+    
+    return render(request, "accounts/verify_otp.php")
+
+
+def reset_password(request):
+    if request.method == 'POST':
+        email = request.session.get('verified_email')
+        password = request.POST.get("password")
+        confirm_password  = request.POST.get("confirm_password")
+
+        if not email:
+            messages.error(request, "Session expired! Please request a new OTP.")
+            return redirect('request_otp')
+        
+        if not password or not confirm_password:
+            messages.error(request, "Both password fields are required.")
+            return redirect('reset_password')
+        
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match. Please try again.")
+            return redirect('reset_password')
+        
+        try:
+            user = Account.objects.get(email=email)
+            user.set_password(password)
+            user.save()
+
+            # Clear session variables
+            request.session.pop('verified_email', None)
+            request.session.pop('reset_email', None)
+
+            messages.success(request, "Password reset successful! You can now log in.")
+            return redirect('login')
+
+        except Account.DoesNotExist:
+            messages.error(request, "User does not exist. Try again.")
+            return redirect('request_otp')
+
+
+
+    else:
+        return render(request, 'accounts/reset_password.php')
     
 

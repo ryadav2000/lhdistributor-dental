@@ -8,5 +8,9 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
     path('dashboard', views.dashboard, name='dashboard'),
-    
+
+    #OTP
+    path('password-reset/', views.request_opt, name='request_otp'),
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
+    path('reset-password/', views.reset_password, name='reset_password')
 ]
