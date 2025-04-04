@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.sessions.models import Session
 from productitem.models import ProductItem  # Import from the correct app
+from accounts.models import Account
 
 class Cart(models.Model):
-    session_id = models.CharField(max_length=100, unique=True)  # Store session key for guest users
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
+    session_id = models.CharField(max_length=255, unique=True, null=True, blank=True)  # Store session key for guest users
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -11,6 +13,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
     product_item = models.ForeignKey(ProductItem, on_delete=models.CASCADE)  # Correct FK to ProductItem
     product_name = models.CharField(max_length=500)  # Store product name
     product_image = models.ImageField(upload_to='cart_product_images/', null=True, blank=True)  # Store product image

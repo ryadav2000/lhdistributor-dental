@@ -97,7 +97,7 @@
                                 <div class="col-lg-12">
                                     <div class="cr-cart-update-bottom">
                                         <a href="product.php" class="cr-links">Continue Shopping</a>
-                                        <a href="checkout.php" class="cr-button">
+                                        <a href="{% url 'checkout' %}" class="cr-button">
                                             Check Out
                                         </a>
                                     </div>

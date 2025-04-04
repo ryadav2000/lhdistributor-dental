@@ -1,5 +1,5 @@
 from django import forms
-from .models import Account
+from .models import Account, State
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -10,6 +10,12 @@ class RegistrationForm(forms.ModelForm):
         'class': 'cr-form-control',
         'placeholder': 'Confirm Password'
     }))
+
+    state = forms.ModelChoiceField(
+        queryset=State.objects.all(),
+        empty_label="Select Your State",
+        widget=forms.Select(attrs={'class': 'cr-form-control'})
+    )
 
     class Meta:
         model = Account
@@ -26,7 +32,6 @@ class RegistrationForm(forms.ModelForm):
         self.fields['phone_number'].widget.attrs['placeholder'] = 'Enter Your Phone Number'
         self.fields['address_line'].widget.attrs['placeholder'] = 'Enter Your Address'
         self.fields['city'].widget.attrs['placeholder'] = 'Enter Your City Name'
-        self.fields['state'].widget.attrs['placeholder'] = 'Enter Your State Name'
         self.fields['country'].widget.attrs['placeholder'] = 'Enter Your Country Name'
         self.fields['email'].widget.attrs['placeholder'] = 'Enter Your Email'
         self.fields['fax_number'].widget.attrs['placeholder'] = 'Enter Your Fax Number'

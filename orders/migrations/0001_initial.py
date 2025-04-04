@@ -12,13 +12,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Brand',
+            name='Tax',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('brand_name', models.CharField(blank=True, max_length=200, null=True)),
-                ('slug', models.SlugField(max_length=250, unique=True)),
-                ('activatedstatus', models.IntegerField(default=1)),
-                ('brand_img', models.ImageField(blank=True, null=True, upload_to='brand_images/')),
+                ('city', models.CharField(max_length=255)),
+                ('zipcode', models.CharField(max_length=20)),
+                ('tax', models.DecimalField(decimal_places=2, max_digits=5)),
             ],
+            options={
+                'ordering': ['city'],
+            },
         ),
     ]

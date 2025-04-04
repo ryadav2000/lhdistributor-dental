@@ -925,3 +925,39 @@ document.addEventListener("DOMContentLoaded", function () {
 setTimeout(function(){
   $('#message').fadeOut('slow')
 }, 4000)
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("same_as_billing_address").addEventListener("change", function () {
+      if (this.checked) {
+          // Copy billing details to shipping details
+          document.getElementById("ship_firstname").value = document.getElementById("bill_firstname").value;
+          document.getElementById("ship_lastname").value = document.getElementById("bill_lastname").value;
+          document.getElementById("ship_companyname").value = document.getElementById("bill_companyname").value;
+          document.getElementById("ship_email").value = document.getElementById("bill_email").value;
+          document.getElementById("ship_phone").value = document.getElementById("bill_phone").value;
+          document.getElementById("ship_address").value = document.getElementById("bill_address").value;
+          document.getElementById("ship_city").value = document.getElementById("bill_city").value;
+          document.getElementById("ship_zipcode").value = document.getElementById("bill_zipcode").value;
+          document.getElementById("ship_country").value = document.getElementById("bill_country").value;
+
+          // Copy state selection
+          document.getElementById("ship_state").value = document.getElementById("bill_state").value;
+      } else {
+          // Clear shipping details when unchecked
+          document.getElementById("ship_firstname").value = "";
+          document.getElementById("ship_lastname").value = "";
+          document.getElementById("ship_companyname").value = "";
+          document.getElementById("ship_email").value = "";
+          document.getElementById("ship_phone").value = "";
+          document.getElementById("ship_address").value = "";
+          document.getElementById("ship_city").value = "";
+          document.getElementById("ship_zipcode").value = "";
+          document.getElementById("ship_country").value = "";
+
+          // Reset state selection
+          document.getElementById("ship_state").value = "";
+      }
+  });
+});

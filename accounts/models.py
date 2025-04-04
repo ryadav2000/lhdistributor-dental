@@ -6,8 +6,14 @@ from django.utils.timezone import now, timedelta
 import random
 #from .models import Account # Import custom account model 
 
+class State(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class MyAccountManager(BaseUserManager):
-    def create_user(self, company_name, first_name, last_name, username, email, address_line, city, state, postal_code, country, password=None, phone_number=None, fax_number=None):
+    def create_user(self, company_name, first_name, last_name, username, email, address_line=None, city=None, state=None, postal_code=None, country=None, password=None, phone_number=None, fax_number=None):
         if not email:
             raise ValueError('User must have an email address')
         if not username:
@@ -21,7 +27,7 @@ class MyAccountManager(BaseUserManager):
             email=self.normalize_email(email),
             address_line=address_line,
             city=city,
-            state=state,
+            state = State.objects.filter(name=state).first(),
             postal_code=postal_code,
             country=country,
             phone_number=phone_number,
@@ -32,26 +38,18 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, company_name, first_name, last_name, username, email, password, address_line, city, state, postal_code, country):
-        user = self.create_user(
-            company_name=company_name,
+    def create_superuser(self, email, username, first_name, last_name, password):
+        """Creates a superuser with only required fields"""
+        user = self.model(
+            email=self.normalize_email(email),
+            username=username,
             first_name=first_name,
             last_name=last_name,
-            
-            username=username,
-            email=email,
-            password=password,
-            address_line=address_line,
-            city=city,
-            state=state,
-            postal_code=postal_code,
-            country=country,
-            phone_number=None,  # Remove fixed number
-            fax_number=None,
+            is_admin=True,
+            is_staff=True,
+            is_superadmin=True,
         )
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superadmin = True
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
@@ -61,7 +59,7 @@ class Account(AbstractBaseUser):
     company_name = models.CharField(max_length=100)
     address_line = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
     postal_code = models.CharField(max_length=6)
     country = models.CharField(max_length=100)
 
@@ -86,7 +84,7 @@ class Account(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'company_name', 'address_line', 'city', 'state', 'postal_code', 'country']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     objects = MyAccountManager()
 
