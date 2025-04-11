@@ -160,3 +160,10 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ravi02.agp@gmail.com'
 EMAIL_HOST_PASSWORD = 'wzzjopmzzishtpvc'
+
+
+# Authorize Net Credentials
+AUTHORIZE_LOGIN_ID = '2G9AT4zhDqB'
+AUTHORIZE_TRANSACTION_KEY = '7du7KZk576e7F42b'
+AUTHORIZE_NET_ENVIRONMENT = 'sandbox'
+

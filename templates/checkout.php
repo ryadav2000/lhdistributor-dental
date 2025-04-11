@@ -31,7 +31,7 @@
                 <!-- checkout content Start -->
                 <div class="cr-checkout-content">
                     <div class="cr-checkout-inner">
-
+                    {% include 'includes/alerts.html' %}
                         <div class="cr-checkout-wrap">
                             <div class="cr-checkout-block cr-check-bill">
                                 <h3 class="cr-checkout-title">Billing Details</h3>

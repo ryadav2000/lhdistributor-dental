@@ -1,8 +1,9 @@
 {% extends 'base.php' %}
 
-{% load static %}
-
 {% block content %}
+
+
+
 
 <!-- Breadcrumb -->
 <section class="section-breadcrumb">
@@ -11,8 +12,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="cr-breadcrumb-title">
-                        <h2>Brand Products</h2>
-                        <span> <a href="./">Home</a> -brand products</span>
+                        <h2>Online Special Products</h2>
+                        <span> <a href="./">Home</a> -online special products</span>
                     </div>
                 </div>
             </div>
@@ -28,7 +29,7 @@
             <div class="col-lg-12">
                 <div class="mb-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="400">
                     <div class="cr-banner">
-                        <h2>{{ brand.brand_name }} Products</h2>
+                        <h2>Online Special Products</h2>
                     </div>
                 </div>
             </div>
@@ -81,11 +82,12 @@
                                         <p class="cr-price"><span class="new-price">${{ first_item.item_price }}</span></p>
                                     {% endif %}
                                 {% endwith %}
+                                <p class="cr-price"><span class="new-price">${{ product.stock }}</span></p>
                             </div>
                         </div>
                     </div>
                     {% empty %}
-                    <p class="text-center">No products available for this brand.</p>
+                    <p class="text-center">No online special products available at the moment.</p>
                     {% endfor %}
 
                 </div>
@@ -140,9 +142,7 @@
 </section>
 
 
+
+
+
 {% endblock %}
-
-
-</body>
-
-</html>

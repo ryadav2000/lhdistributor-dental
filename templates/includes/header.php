@@ -24,7 +24,7 @@
                 <i class="ri-heart-3-line"></i>
                 <span>Wishlist</span>
             </a> -->
-                        <a href="javascript:void(0)" class="cr-right-bar-item Shopping-toggle">
+                        <a href="{% url 'cart' %}" class="cr-right-bar-item">
                             <i class="ri-shopping-cart-line"></i>
                             <span>Cart</span>
                         </a>
@@ -40,9 +40,6 @@
                                         <a class="dropdown-item" href="{% url 'register' %}">Register</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="checkout.php">Checkout</a>
-                                    </li>
-                                    <li>
                                         <a class="dropdown-item" href="{% url 'login' %}">Login</a>
                                     </li>
                                     {% else %}
@@ -50,7 +47,7 @@
                                         <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="checkout.php">Checkout</a>
+                                        <a class="dropdown-item" href="{% url 'checkout' %}">Checkout</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -103,22 +100,31 @@
                                     <i class="ri-user-3-line"></i>
                                 </a>
                                 <ul class="dropdown-menu">
+                                    {% if user.id is None %}
                                     <li>
-                                        <a class="dropdown-item" href="#">Register</a>
+                                        <a class="dropdown-item" href="{% url 'register' %}">Register</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#">Checkout</a>
+                                        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                                    </li>
+                                    {% else %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#">Login</a>
+                                        <a class="dropdown-item" href="{% url 'checkout' %}">Checkout</a>
                                     </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                    </li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         </ul>
                         <a href="#" class="cr-right-bar-item">
                             <i class="ri-heart-line"></i>
                         </a>
-                        <a href="javascript:void(0)" class="cr-right-bar-item Shopping-toggle">
+                        <a href="{% url 'cart' %}" class="cr-right-bar-item">
                             <i class="ri-shopping-cart-line"></i>
                         </a>
                     </div>
@@ -131,7 +137,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="product.php">
+                                <a class="nav-link" href="{% url 'online-special' %}">
                                     Online Specials
                                 </a>
                             </li>

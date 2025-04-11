@@ -22,5 +22,8 @@ def home(request):
     }
     return render(request, 'home.php', context)
 
+
+
+
 def contact_us(request):
     return render(request, 'contact-us.php')

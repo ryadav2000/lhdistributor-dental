@@ -59,13 +59,27 @@ class ProductAdminForm(forms.ModelForm):
         return super().save(commit=commit)
 
 
+# Online Special Add To Online Special
+@admin.action(description='Mark selected products as Online Special')
+def make_online_special(modeladmin, request, queryset):
+    queryset.update(online_special=True)
+
+
+# Online Special Remove from Online Special
+@admin.action(description='Remove selected product from Online special')
+def remove_online_special(modeladmin, requeest, queryset):
+    queryset.update(remove_online_special)
+
+
 # Customize the Product admin interface
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
     prepopulated_fields      = {'slug': ('product_name',)}
-    list_display = ('product_name', 'category', 'subcategory', 'brand', 'activatedstatus')
+    list_display = ('product_name', 'category', 'subcategory', 'brand', 'activatedstatus', 'online_special')
     search_fields = ('product_name',)
     list_filter = ('product_name',)
+    list_editable = ('online_special',)
+    actions = [make_online_special, remove_online_special]
 
     fieldsets = (
         (None, {

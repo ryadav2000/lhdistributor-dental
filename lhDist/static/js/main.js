@@ -961,3 +961,17 @@ document.addEventListener("DOMContentLoaded", function () {
       }
   });
 });
+
+
+// ============== card ============
+function toggleradio() {
+  var cardForm = document.querySelector('.card-details');
+  var pay2 = document.getElementById('pay2');
+
+  if (pay2.checked) {
+    cardForm.style.display = "block";
+  } else {
+    cardForm.style.display = "none";
+  }
+}
+

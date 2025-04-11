@@ -22,7 +22,7 @@ def brand_list(request):
 
 def brand_product(request, brand_slug):
     brand = get_object_or_404(Brand, slug=brand_slug, activatedstatus=1)
-    products = Product.objects.filter(brand=brand, activatedstatus=True)
+    products = Product.objects.filter(brand=brand, activatedstatus=True).prefetch_related('items')
 
     for product in products:
         product.price = product.items.first().item_price if product.items.exists() else None
@@ -33,4 +33,4 @@ def brand_product(request, brand_slug):
     page = request.GET.get('page')
     paged_product = paginator.get_page(page)
 
-    return render(request, 'brand-product.php', {'brand': brand, 'products' : paged_product})
+    return render(request, 'brand-product.php', {'brand': brand, 'products': paged_product})

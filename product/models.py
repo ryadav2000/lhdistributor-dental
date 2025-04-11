@@ -17,6 +17,7 @@ class Product(models.Model):
     product_details = JSONField(null=True, blank=True, verbose_name="Product Details")
     new_arrival = models.BooleanField(default=False, verbose_name="New Arrival")
     our_product = models.BooleanField(default=False, verbose_name="Our Product")
+    online_special = models.BooleanField(default=False)
     activatedstatus = models.BooleanField(default=True, verbose_name="Activated Status")
 
     def __str__(self):

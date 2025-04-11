@@ -256,7 +256,7 @@
                                     <h6 class="mt-2 mb-2">{{ product.product_name }} </h6>
                                     <a href="{{ product.get_url }}" class="mt-3 b_details">Details</a>
                                     </a>
-                                    <p class="cr-price"><span class="new-price">$9.99</span> </p>
+                                    <p class="cr-price"><span class="new-price">${{ product.price }}</span> </p>
                                 </div>
                             </div>
                         </div>

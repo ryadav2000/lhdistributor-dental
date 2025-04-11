@@ -92,8 +92,8 @@
                                                 <div class="item-content">
                                                     <span class="item-heading">{{ cart_item.product_name }}</span>
                                                     <p><strong>Item Code: </strong>{{ cart_item.manufacturer_code }}</p>
-                                                    <p><strong>Quantity:  </strong>{{ cart_item.quantity }}</p>
-                                                    <p><strong>Price:  </strong> ${{ cart_item.item_price }}</p>
+                                                    <p><strong>Quantity: </strong>{{ cart_item.quantity }}</p>
+                                                    <p><strong>Price: </strong> ${{ cart_item.item_price }}</p>
                                                 </div>
                                             </li>
                                             {% endfor %}
@@ -150,24 +150,23 @@
                                 <div class="cr-check-pay-img mb-4">
                                     <img src="{% static 'img/banner/payment.png' %}" alt="payment">
                                 </div>
-                                <form action="#" class="payment-options">
+                                <form action="{% url 'make_payment' %}" method="POST" class="payment-options">
+                                    {% csrf_token %}
+
                                     <span class="cr-pay-option">
-                                        <span>
-                                            <input type="radio" id="pay1" name="payment">
-                                            <label for="pay1">By Cheque</label>
-                                        </span>
+                                        <input type="radio" id="pay1" name="payment_method" value="by_cheque">
+                                        <label for="pay1">By Cheque</label>
                                     </span>
+
                                     <span class="cr-pay-option">
-                                        <span>
-                                            <input type="radio" id="pay2" name="payment">
-                                            <label for="pay2">Credit Card</label>
-                                        </span>
+                                        <input type="radio" id="pay2" name="payment_method" value="by_credit_card">
+                                        <label for="pay2">Credit Card</label>
                                     </span>
+
+                                    <input type="submit" class="cr-button mt-30 mb-30" value="Submit">
                                 </form>
                             </div>
                         </div>
-
-                        <button type="submit" class="cr-button mt-30 mb-30" fdprocessedid="bgzxg">Place Order</button>
                     </div>
                     <!-- Sidebar Payment Block -->
                 </div>

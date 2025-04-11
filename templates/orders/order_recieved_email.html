@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h2>Dear {{ user.first_name }},</h2>
+
+    <p>Thank you for placing your order <strong>#{{ order.order_id }}</strong> with us.</p>
+
+    <p><strong>Payment Method:</strong>
+        {% if order.payment.payment_method == 'Credit Card' %}
+            Credit Card
+        {% else %}
+            By Cheque
+        {% endif %}
+    </p>
+    <p><strong>Total Amount:</strong> ${{ order.total_price }}</p>
+
+    <p>
+        {% if order.payment.payment_method == 'By Cheque' %}
+        Please send your cheque to the following address:
+        {% else %}
+        Company address:
+        {% endif %}
+        <br><br>
+        <strong>LH Distributors</strong><br>
+        606 Drake Ln,<br>
+        Washington,<br>
+        IL 61571
+    </p>
+
+    {% if order.payment.payment_method == 'By Cheque' %}
+    <p>Once we receive the cheque, we will process and ship your order immediately.</p>
+    {% endif %}
+    <hr style="margin: 30px 0;">
+
+    <p>If you have any questions, feel free to contact our support team at 
+    <a href="mailto:lhdistributors88@gmail.com">lhdistributors88@gmail.com</a>.</p>
+
+    <p>Thank you for shopping with us!</p>
+
+    <br>
+    <strong>– LH Distributors Team</strong>
+</body>
+</html>

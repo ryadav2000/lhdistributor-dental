@@ -153,3 +153,21 @@ def search(request):
     return render(request, 'product.php', context)
 
 
+def online_special_products(request):
+    products = Product.objects.filter(online_special=True, activatedstatus=True).prefetch_related('items')
+
+
+    # Attach price from the first ProductItem (if exists)
+    for product in products:
+        product.price = product.items.first().item_price if product.items.exists() else None
+        product.stock = product.items.first().stock if product.items.exists() else None
+
+    
+    paginator = Paginator(products, 12)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+
+
+    return render(request, 'online-special.php', {'products': paged_products})
+
+

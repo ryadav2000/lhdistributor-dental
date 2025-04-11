@@ -9844,8 +9844,64 @@ width: 40%;
 }
 
 .payment-options{
-  display: flex;
+  display: block;
   flex-direction: row;
   justify-content: space-between;
 }
 } 
+
+.card-details{
+  margin-top: 10px;
+  display: none;
+lable{
+  display: block;
+  margin-bottom: 5px;
+}
+input{
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+}
+
+/* ============== invoice ============= */
+
+.invoice{
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+.order-info {
+    margin-bottom: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.text-right {
+    text-align: right;
+}
+.total-row {
+    font-weight: bold;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+}
+.billing-address {
+    margin-top: 30px;
+}
+.thank-you {
+    margin-top: 30px;
+    font-style: italic;
+}
+}
