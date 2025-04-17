@@ -178,7 +178,8 @@ def place_order(request):
                     product_name=item.product_name,  # Ensure this field exists
                     quantity=item.quantity,
                     price=item.item_price,
-                    subtotal=item.subtotal()
+                    subtotal=item.subtotal(),
+                    product_image_url=item.product_image.url if item.product_image else ''
                 )
 
             # Create a Payment instance (to be processed later)
@@ -210,7 +211,6 @@ def place_order(request):
 def make_payment(request):
     user = request.user
 
-    # Only POST allowed
     if request.method != 'POST':
         return redirect('checkout')
     
@@ -218,22 +218,17 @@ def make_payment(request):
     if not payment_method:
         messages.error(request, 'Please select a payment method.')
         return redirect('checkout')
-    
 
-    # Fetch the latest active order
     order = Order.objects.filter(user=user, is_ordered=False).order_by('-created_at').first()
     if not order:
         messages.error(request, 'No active order found.')
         return redirect('checkout')
-    
-    # Get the related payment object (already created in place_order)
+
     payment = Payment.objects.filter(order=order).first()
     if not payment:
         messages.error(request, 'Payment object not found for this order.')
         return redirect('checkout')
-    
 
-    # Update payment details based on method 
     if payment_method == 'by_cheque':
         payment.payment_method = 'By Cheque'
         payment.status = 'Cheque'
@@ -243,18 +238,28 @@ def make_payment(request):
         order.is_ordered = True
         order.save()
 
-        # Reduce stock for each product in the order
         order_items = OrderItem.objects.filter(order=order)
-        for item in order_items:
-            try:
-                product = ProductItem.objects.filter(product__product_name=item.product_name).first()
-                if product:
-                    product.stock -= item.quantity
-                    product.save()
-            except ProductItem.DoesNotExist:
-                continue # If product doesn't exist, just skip
 
-        # Send new style confirmation email
+        # Stock reduction and product mapping with manufacturer code
+        item_details = []
+        for item in order_items:
+            product_item = ProductItem.objects.filter(product__product_name=item.product_name).first()
+            if product_item:
+                product_item.stock -= item.quantity
+                product_item.save()
+
+                # Add manufacturer_code to each item
+                item.manufacturer_code = product_item.manufacturer_code
+            else:
+                item.manufacturer_code = 'N/A'
+            item_details.append(item)
+
+        # Delete the user's cart and all related items
+            user_cart = Cart.objects.filter(user=user).first()
+            if user_cart:
+                user_cart.delete()  # Automatically deletes related CartItem(s)
+
+        # Send confirmation email
         mail_subject = 'Thank you for your order!'
         message = render_to_string('orders/order_recieved_email.html', {
             'user': request.user,
@@ -266,17 +271,18 @@ def make_payment(request):
         send_email.send()
 
         messages.success(request, "Order placed successfully. Please send the cheque.")
-        return render(request, 'payment/payment_success_cheque.html', {'order': order})
-    
+        return render(request, 'payment/payment_success.html', {
+            'order': order,
+            'order_items': item_details
+        })
+
     elif payment_method == 'by_credit_card':
         payment.payment_method = 'Credit Card'
         payment.status = 'Pending'
         payment.save()
-
         request.session['current_order_id'] = order.id
+        return render(request, 'payment/credit_card_form.php', {'order': order})
 
-        return render(request, 'payment/credit_card_form.html', {'order': order})
-    
     else:
         messages.error(request, 'Invalid payment method selected.')
         return redirect('checkout')
@@ -393,13 +399,25 @@ def credit_card_payment(request):
                 order.is_ordered = True
                 order.save()
 
-                # Update stock
                 order_items = OrderItem.objects.filter(order=order)
+
                 for item in order_items:
                     product_item = ProductItem.objects.filter(product__product_name=item.product_name).first()
                     if product_item:
                         product_item.stock -= item.quantity
                         product_item.save()
+
+                        # Update manufacturer_code in OrderItem
+                        item.manufacturer_code = product_item.manufacturer_code
+                    else:
+                        item.manufacturer_code = "N/A"
+                    item.save()
+
+                # Delete user's cart and related items
+                user_cart = Cart.objects.filter(user=user).first()
+                if user_cart:
+                    user_cart.delete()
+
 
             # Send confirmation email
             try:
@@ -415,7 +433,7 @@ def credit_card_payment(request):
                 messages.warning(request, "Order placed, but confirmation email could not be sent.")
 
             messages.success(request, "Payment successful! Order placed.")
-            return render(request, 'payment/payment_success_card.html', {'order': order})
+            return render(request, 'payment/payment_success.html', {'order': order, 'order_items': order_items})
         else:
             error_msg = trans_response.get('errors', [{}])[0].get('errorText', "Payment was declined.")
             messages.error(request, f"Payment failed: {error_msg}")

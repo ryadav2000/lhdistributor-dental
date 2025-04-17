@@ -73,5 +73,17 @@ class RegistrationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = [
+            'first_name', 'last_name', 'phone_number', 'email',
+            'company_name', 'address_line', 'city', 'state', 'postal_code', 'country',
+            'fax_number', 'profile_picture'
+        ]
+
+
         
 

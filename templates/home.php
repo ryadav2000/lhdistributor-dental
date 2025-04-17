@@ -5,38 +5,7 @@
 
 {% block content %}   
 
-    <!-- Mobile menu -->
-    <div class="cr-sidebar-overlay"></div>
-    <div id="cr_mobile_menu" class="cr-side-cart cr-mobile-menu">
-        <div class="cr-menu-title">
-            <span class="menu-title">My Menu</span>
-            <button type="button" class="cr-close">×</button>
-        </div>
-        <div class="cr-menu-inner">
-            <div class="cr-menu-content">
-                <ul>
-                    <li class="dropdown drop-list">
-                        <a href="./">Home</a>
-                    </li>
-
-                    <li class="dropdown drop-list">
-                        <a href="#">Online Specials</a>
-                    </li>
-                    <li class="dropdown drop-list">
-                        <a href="#">Re Order From History</a>
-                    </li>
-                    <li class="dropdown drop-list">
-                        <a href="#">Shop By Brand</a>
-                    </li>
-                    <li class="dropdown drop-list">
-                        <a href="#">Contact Us</a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
-
+{% include 'includes/alerts.html' %}
     <section class="section-heros padding-b-50 next">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -224,6 +193,13 @@
                                       {% else %}
                                         <img src="" alt="product-1">
                                       {% endif %}
+                                      
+                                      {% if product.stock == 0 %}
+                                        <div class="sold">
+                                            <p>Out of stock</p>
+                                        </div>
+                                      {% endif %}
+
                                     </div>
                                     <div class="cr-side-view">
                                         <a href="javascript:void(0)" class="wishlist">
@@ -336,6 +312,3 @@
 
 
 
-</body>
-
-</html>

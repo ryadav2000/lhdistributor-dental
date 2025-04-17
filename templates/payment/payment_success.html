@@ -1,0 +1,221 @@
+{% extends 'base.php' %} {% load static %} {% block content %}
+
+<style>
+  .invoice {
+    width: 100%;
+    max-width: 70%;
+    margin: 40px auto 40px auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+  }
+  @media (max-width: 992px) {
+    .invoice {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="invoice">
+  <table>
+    <!-- Header -->
+    <table style="width: 100%; margin-bottom: 30px">
+      <tr>
+        <td style="width: 50%">
+          <div>
+            <img src="{% static 'img/logo/logo.png' %}" alt="" />
+          </div>
+        </td>
+        <td style="width: 50%; text-align: right">
+          <div style="color: #f28b00; font-weight: bold; font-size: 18px">
+            L & H Dental Supply
+          </div>
+          <div style="color: #383838; margin-bottom: 10px; margin-top: 10px">
+            (530) 859-6003
+          </div>
+
+          <div style="color: #383838">606 Drake</div>
+          <div style="color: #383838">Ln Washington</div>
+          <div style="color: #383838">IL 61571</div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Title -->
+    <h2
+      style="
+        color: #383838;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+      "
+    >
+      Order Details
+    </h2>
+
+    <!-- Billing & Invoice Info -->
+    <table style="width: 100%; margin-top: 20px; margin-bottom: 30px">
+      <tr>
+        <td style="vertical-align: top; color: #383838">
+          <strong>Bill To</strong><br />
+          <span style="color: #f28b00; font-weight: bold"
+            >{{ user.full_name }}</span
+          ><br />
+          {{ user.company_name }}<br />
+          {{ user.address_line }}<br />
+          {{ user.city }}, {{ user.state }} {{ user.postal_code }}<br />
+          {{ user.country }}<br /><br />
+
+          <strong>Ship To</strong><br />
+          <span style="color: #f28b00; font-weight: bold"
+            >{{ order.full_name }}</span
+          ><br />
+          {{ order.company_name }}<br />
+          {{ order.address_line }}<br />
+          {{ order.city }}, {{ order.state }} {{ order.postal_code }}<br />
+          {{ order.country }}
+        </td>
+        <td style="text-align: right">
+          <table style="border-collapse: collapse; width: 100%">
+            <tr>
+              <td
+                bgcolor="#f28b00"
+                style="color: white; padding: 8px; border: 1px solid #ccc"
+              >
+                Order Number
+              </td>
+              <td style="border: 1px solid #ccc; padding: 8px">
+                {{ order.order_id }}
+              </td>
+            </tr>
+            <tr>
+              <td
+                bgcolor="#f28b00"
+                style="color: white; padding: 8px; border: 1px solid #ccc"
+              >
+                Order Date
+              </td>
+              <td style="border: 1px solid #ccc; padding: 8px">
+                {{ order.created_at }}
+              </td>
+            </tr>
+            <tr>
+              <td
+                bgcolor="#f28b00"
+                style="color: white; padding: 8px; border: 1px solid #ccc"
+              >
+                Payment Method
+              </td>
+              <td style="border: 1px solid #ccc; padding: 8px">
+                {{ order.payment.payment_method }}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Items Table -->
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px">
+      <thead>
+        <tr bgcolor="#f28b00" style="color: white">
+          <th style="padding: 10px; border: 1px solid #ccc">#</th>
+          <th style="padding: 10px; border: 1px solid #ccc; text-align: start">
+            Item & Description
+          </th>
+          <th style="padding: 10px; border: 1px solid #ccc">Qty</th>
+          <th style="padding: 10px; border: 1px solid #ccc">Price</th>
+          <th style="padding: 10px; border: 1px solid #ccc">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order_items %}
+        <tr>
+          <td style="padding: 20px 10px; border: 1px solid #ccc">1</td>
+          <td style="padding: 20px 10px; border: 1px solid #ccc">
+            <div><strong>{{ item.product_name }}</strong></div>
+            <div style="font-size: 14px; color: #383838">
+              Manufacturing Code: {{ item.manufacturer_code }}
+            </div>
+          </td>
+          <td style="padding: 20px 10px; border: 1px solid #ccc">
+            {{ item.quantity }}
+          </td>
+          <td style="padding: 20px 10px; border: 1px solid #ccc">
+            {{ item.price }}
+          </td>
+          <td style="padding: 20px 10px; border: 1px solid #ccc">
+            {{ item.subtotal }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Totals -->
+    <table style="width: 100%; margin-top: 20px">
+      <tr>
+        <td style="width: 60%"></td>
+        <td style="text-align: right">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              padding-bottom: 15px;
+              border-bottom: 1px solid #ccc;
+            "
+          >
+            <div><strong>Sub Total:</strong></div>
+            <div>${{ order.total_price }}</div>
+          </div>    
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin: 15px 0px;
+              border-bottom: 1px solid #ccc;
+              padding-bottom: 15px;
+            "
+          >
+            <div>
+              <p style="
+              display: flex;
+              align-items: start;
+              flex-direction: column;
+          "><strong>Estimated Tax:</strong>(6.25% except illinois - 8.50%)</p>
+            </div>
+            <div>${{ order.tax_amount|floatformat:2 }}</div>
+          </div>
+          <div style="display: flex; justify-content: space-between">
+            <div>
+              <p style="
+              display: flex;
+              align-items: start;
+              flex-direction: column;
+          ">
+          <strong>Shipping Tax:</strong>(On order less than $300)</p>
+              
+            </div>
+            <div>
+              ${{ order.shipping_tax |floatformat:2 }}
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between">
+            <div><strong>Total:</strong></div>
+            <div style="color: #f28b00; font-weight: 600; font-size: 20px">
+              ${{ order.final_price |floatformat:2 }}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Footer -->
+    <p style="margin-top: 100px">Thank you for doing business with us.</p>
+
+    <!-- <p style="font-size: 13px; margin-top: 40px">
+      <strong>Terms & Conditions</strong><br />
+      -------------------------------------------------------------
+    </p> -->
+  </table>
+</div>
+
+{% endblock %}

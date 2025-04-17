@@ -75,6 +75,9 @@ class Account(AbstractBaseUser):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=100, unique=True)
 
+    profile_picture = models.ImageField(upload_to='profile_pics/', default='profile_pics/default.png', blank=True)
+    
+
     # Required Fields
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)  # Use auto_now=True to track last login properly
@@ -96,6 +99,9 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+    
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
 
 

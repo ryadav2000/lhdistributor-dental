@@ -5,6 +5,7 @@
 {% block content %}
 
 
+{% include 'includes/alerts.html' %}
 <!-- Breadcrumb -->
 <section class="section-breadcrumb">
     <div class="cr-breadcrumb-image">
@@ -96,9 +97,9 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="cr-cart-update-bottom">
-                                        <a href="product.php" class="cr-links">Continue Shopping</a>
+                                        <a href="{% url 'online-special' %}" class="cr-links">Continue Shopping</a>
                                         <a href="{% url 'checkout' %}" class="cr-button">
-                                            Check Out
+                                            Checkout
                                         </a>
                                     </div>
                                 </div>

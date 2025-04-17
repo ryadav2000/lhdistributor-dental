@@ -30,6 +30,7 @@ def all_product_data(request):
 
     for product in products:
         product.price = product.items.first().item_price if product.items.exists() else None
+        product.stock = product.items.first().stock if product.items.exists() else None
 
     products = products.order_by('product_name')
 
@@ -62,6 +63,7 @@ def filter_by_subcategory(request, subcategory_slug):
 
     for product in products:
         product.price = product.items.first().item_price if product.items.exists() else None 
+        product.stock = product.items.first().stock if product.items.exists() else None
 
     
     paginator = Paginator(products, 12)
@@ -138,6 +140,7 @@ def search(request):
 
     for product in products:
         product.price = product.items.first().item_price if product.items.exists() else None  
+        product.stock = product.items.first().stock if product.items.exists() else None
 
 
     paginator = Paginator(products, 12)

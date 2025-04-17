@@ -30,7 +30,7 @@
             <div class="col-lg-12">
                 <div class="mb-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="400">
                     <div class="cr-banner">
-                        <h2>Search Result</h2>
+                        <h2>Search Results</h2>
                     </div>
                 </div>
             </div>
@@ -98,6 +98,13 @@
                                     {% else %}
                                     <img src="" alt="product-1">
                                     {% endif %}
+
+                                    {% if product.stock == 0 %}
+                                    <div class="sold">
+                                        <p>Out of stock</p>
+                                    </div>
+                                    {% endif %}
+
                                 </div>
                                 <div class="cr-side-view">
                                     <a href="javascript:void(0)" class="wishlist">

@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate, login as auth_login
+from orders.models import Order
+from django.db.models import Sum
+from .forms import EditProfileForm
 
 #Verification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -23,6 +26,11 @@ from datetime import timedelta
 
 # Testing
 from django.http import HttpResponse
+
+# Password Changeing used modules
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib.auth import update_session_auth_hash
 
 
 # Create your views here.
@@ -140,13 +148,6 @@ def activate(request, uidb64, token):
         messages.error(request, "Invalid or expired activation link!")
         return redirect('register')
     
-
-@login_required(login_url='login')
-def dashboard(request):
-    return render(request, 'accounts/dashboard.php')
-
-
-
 
 # OTP
 def request_opt(request):
@@ -291,4 +292,105 @@ def reset_password(request):
     else:
         return render(request, 'accounts/reset_password.php')
     
+
+
+
+# *********** Dashboard Views ********************
+
+@login_required(login_url='login')
+def dashboard(request):
+
+    orders = Order.objects.filter(user_id=request.user.id, is_ordered=True).order_by('-created_at')
+    orders_count = orders.count()
+
+    # Get total amount of all ordered orders by the user
+    total_amount = orders.aggregate(Sum('final_price'))['final_price__sum'] or 0
+
+    context = {
+        'order_count': orders_count,
+        'total_amount': total_amount
+    }
+
+    return render(request, 'accounts/dashboard.php', context)
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('edit_profile')
+    else:
+        form = EditProfileForm(instance=user)
+
+    
+    print(request.FILES)
+
+    return render(request, 'accounts/edit_profile.php', {'form': form})
+
+
+login_required(login_url='login')
+def order_info(request):
+
+    orders = Order.objects.filter(user=request.user, is_ordered=True) \
+        .annotate(total_items=Sum('order_items__quantity')) \
+        .order_by('-created_at')
+
+    return render(request, 'accounts/order_info.php', {'orders': orders})
+
+
+@login_required(login_url='login')
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    items = order.order_items.all()
+
+    return render(request, 'accounts/order_detail.php', {
+        'order': order,
+        'items': items,
+    })
+
+
+login_required(login_url='login')
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+
+        if not current_password or not new_password  or not confirm_password:
+            messages.error(request, 'All fields are required.')
+            return redirect('change_password')
+        
+        try:
+            user = request.user
+
+            if not user.check_password(change_password):
+                messages.error(request, 'Current password is incorrect.')
+                return redirect('change_password')
+            
+
+            if new_password != confirm_password:
+                messages.error(request, 'New passwords do not match.')
+                return redirect('change_password')
+
+
+            # Validate password strength
+            validate_password = validate_password(new_password, user)
+
+            messages.success(request, 'Password updated successfully.')
+            return redirect('dashboard')
+        
+        except ValidationError as ve:
+            for error in ve.messages:
+                messages.error(request, error)
+        except ObjectDoesNotExist:
+            messages.error(request, 'User does not exist.')
+        except Exception as e:
+            messages.error(request, f'An unexpected error occurred: {str(e)}')
+
+    return render(request, 'accounts/change_password.php')    
 

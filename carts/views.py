@@ -162,6 +162,12 @@ def cart(request):
         # Fetch cart items
         cart_items = CartItem.objects.filter(cart=cart) if cart else []
 
+
+        # Check if cart is empty
+        if not cart_items:
+            messages.warning(request, 'Your cart is empty.')
+            return redirect('home') 
+
     except DatabaseError:
         messages.error(request, "An unexpected error occurred. Please try again later.")
         cart_items = []

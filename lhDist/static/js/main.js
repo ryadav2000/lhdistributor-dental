@@ -852,6 +852,17 @@ function updateSelection(selectedElement) {
     radio.checked = true;
     document.getElementById("selected-product-item-id").value = radio.value;
   }
+
+  // Update Add to Cart button based on stock
+  let stock = parseInt(selectedElement.getAttribute("data-stock")) || 0;
+  let addToCartBtn = document.querySelector(".cr-add-button");
+
+  if (stock > 0) {
+    addToCartBtn.innerHTML = `<button type="submit" class="cr-button cr-shopping-bag">Add to cart</button>`;
+  } else {
+    addToCartBtn.innerHTML = `<button type="button" class="cr-button cr-out-of-stock" disabled>Out of Stock</button>`;
+  }
+
 }
 
 function ensureVariationSelected(event) {

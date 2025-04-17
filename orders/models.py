@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Account
+from product.models import Product
 from django.contrib.auth import get_user_model
 import uuid
 from decimal import Decimal
@@ -64,7 +65,8 @@ class Order(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_items")
+    product_image_url = models.CharField(max_length=255, null=True, blank=True)
     product_name = models.CharField(max_length=255)
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)

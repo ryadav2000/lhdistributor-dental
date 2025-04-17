@@ -65,7 +65,7 @@
                                     <div class="cr-kg cr-list">
                                         <ul class="cr-kg cr-list">
                                             {% for product_variation in product_variations %}
-                                            <li onclick="updateSelection(this)" data-id="{{ product_variation.id }}"
+                                            <li onclick="updateSelection(this)" data-id="{{ product_variation.id }}" data-stock="{{ product_variation.stock }}"
                                                 class="{% if forloop.first %}active-color{% endif %}">
 
                                                 <!-- Ensure the radio button exists inside the <li> -->
@@ -110,7 +110,11 @@
                                         <button type="button" class="plus">+</button>
                                     </div>
                                     <div class="cr-add-button">
-                                        <button type="submit" class="cr-button cr-shopping-bag">Add to cart</button>
+                                        {% if product_variations.first.stock > 0 %}
+                                            <button type="submit" class="cr-button cr-shopping-bag">Add to cart</button>
+                                        {% else %}
+                                            <button type="button" class="cr-button cr-out-of-stock" disabled>Out of Stock</button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

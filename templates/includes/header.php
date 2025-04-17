@@ -24,15 +24,22 @@
                 <i class="ri-heart-3-line"></i>
                 <span>Wishlist</span>
             </a> -->
-                        <a href="{% url 'cart' %}" class="cr-right-bar-item">
+                        <a href="{% url 'cart' %}" class="cr-right-bar-item cart-icon">
+    
                             <i class="ri-shopping-cart-line"></i>
-                            <span>Cart</span>
+                            <span class="cart-count">{{ cart_item_count }}</span>
                         </a>
 
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle cr-right-bar-item" href="javascript:void(0)">
-                                    <span class="user-login"> <i class="ri-user-3-line"></i></span>
+                                <a class="nav-link dropdown-toggle cr-right-bar-item" href="{% url 'dashboard' %}">
+                                    <span class="user-login"> 
+
+                                    <img src="{% static 'img/default-user.jpg' %}" />
+                                    </span>
+
+                                    <!-- <span class="user-login"> <i class="ri-user-3-line"></i></span> -->
+                                    <span class="user-name"><strong>{% if user.is_authenticated %}Hii.. {{ user.first_name }} {% endif %}</strong></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     {% if user.id is None %}
@@ -90,13 +97,13 @@
 
 
                 <nav class="navbar navbar-expand-lg">
-                    <a href="javascript:void(0)" class="navbar-toggler shadow-none">
+                    <a href="{% url 'dashboard' %}" class="navbar-toggler shadow-none">
                         <i class="ri-menu-3-line"></i>
                     </a>
                     <div class="cr-header-buttons">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href="javascript:void(0)">
+                                <a class="nav-link" href="{% url 'dashboard' %}">
                                     <i class="ri-user-3-line"></i>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -137,12 +144,17 @@
                             </li>
 
                             <li class="nav-item">
+                                <a class="nav-link" href="{% url 'aboutus' %}">
+                                   About Us
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'online-special' %}">
                                     Online Specials
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{% url 'order_info' %}">
                                     Re Order From History
                                 </a>
                             </li>
@@ -167,4 +179,36 @@
     </div>
 </header>
 
+
+ <!-- Mobile menu -->
+ <div class="cr-sidebar-overlay"></div>
+    <div id="cr_mobile_menu" class="cr-side-cart cr-mobile-menu">
+        <div class="cr-menu-title">
+            <span class="menu-title">My Menu</span>
+            <button type="button" class="cr-close">×</button>
+        </div>
+        <div class="cr-menu-inner">
+            <div class="cr-menu-content">
+                <ul>
+                    <li class="dropdown drop-list">
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+
+                    <li class="dropdown drop-list">
+                        <a href="{% url 'online-special' %}">Online Specials</a>
+                    </li>
+                    <li class="dropdown drop-list">
+                        <a href="{% url 'order_info' %}">Re Order From History</a>
+                    </li>
+                    <li class="dropdown drop-list">
+                        <a href="{% url 'brand_list' %}">Shop By Brand</a>
+                    </li>
+                    <li class="dropdown drop-list">
+                        <a href="{% url 'contactus' %}">Contact Us</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
 <!-- Header End -->

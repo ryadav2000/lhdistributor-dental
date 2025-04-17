@@ -48,6 +48,12 @@
                                     {% else %}
                                     <img src="" alt="product-1">
                                     {% endif %}
+
+                                    {% if product.stock == 0 %}
+                                    <div class="sold">
+                                        <p>Out of stock</p>
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 <div class="cr-side-view">
                                     <a href="javascript:void(0)" class="wishlist">
@@ -82,7 +88,6 @@
                                         <p class="cr-price"><span class="new-price">${{ first_item.item_price }}</span></p>
                                     {% endif %}
                                 {% endwith %}
-                                <p class="cr-price"><span class="new-price">${{ product.stock }}</span></p>
                             </div>
                         </div>
                     </div>

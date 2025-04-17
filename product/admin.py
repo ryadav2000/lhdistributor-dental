@@ -2,8 +2,16 @@ from django.contrib import admin
 from .models import Product
 from django import forms
 import json
+from productitem.models import ProductItem
+import admin_thumbnails
 
 # Custom form for Product
+class ProductItemInliine(admin.TabularInline):
+    model = ProductItem
+    extra = 1
+
+
+
 class ProductAdminForm(forms.ModelForm):
     # Dynamic fields (key-value pairs)
     additional_fields = forms.CharField(
@@ -72,14 +80,16 @@ def remove_online_special(modeladmin, requeest, queryset):
 
 
 # Customize the Product admin interface
+@admin_thumbnails.thumbnail('photo_url')
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
     prepopulated_fields      = {'slug': ('product_name',)}
-    list_display = ('product_name', 'category', 'subcategory', 'brand', 'activatedstatus', 'online_special')
+    list_display = ('photo_url_thumbnail','product_name', 'category', 'subcategory', 'brand', 'activatedstatus', 'online_special')
     search_fields = ('product_name',)
     list_filter = ('product_name',)
     list_editable = ('online_special',)
     actions = [make_online_special, remove_online_special]
+    inlines = [ProductItemInliine]
 
     fieldsets = (
         (None, {

@@ -124,7 +124,7 @@
                                             </span>
                                             <span class="cr-bill-wrap">
                                                 <label>Address</label>
-                                                <input type="text" name="address" id="ship_address" placeholder="Address Line 1">
+                                                <input type="text" name="address_line" id="ship_address" placeholder="Address Line 1">
                                             </span>
                                             <span class="cr-bill-wrap cr-bill-half">
                                                 <label>Town / City *</label>
