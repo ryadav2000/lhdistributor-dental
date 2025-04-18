@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -88,12 +88,12 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lh_dist_python',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',  # Set to the database server address, or '127.0.0.1' for local
-        'PORT': '3306',   # Default MySQL port
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),  # Set to the database server address, or '127.0.0.1' for local
+        'PORT': config('DB_PORT'),   # Default MySQL port
     }
 }
 
@@ -156,16 +156,16 @@ MESSAGE_TAGS = {
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ravi02.agp@gmail.com'
-EMAIL_HOST_PASSWORD = 'wzzjopmzzishtpvc'
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST', default='localhost')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 # Authorize Net Credentials
-AUTHORIZE_LOGIN_ID = '2G9AT4zhDqB'
-AUTHORIZE_TRANSACTION_KEY = '7du7KZk576e7F42b'
-AUTHORIZE_NET_ENVIRONMENT = 'sandbox'
+AUTHORIZE_LOGIN_ID = config('AUTHORIZE_LOGIN_ID')
+AUTHORIZE_TRANSACTION_KEY = config('AUTHORIZE_TRANSACTION_KEY')
+AUTHORIZE_NET_ENVIRONMENT = config('AUTHORIZE_NET_ENVIRONMENT')
 
