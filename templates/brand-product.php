@@ -57,9 +57,9 @@
                                         <i class="ri-eye-line"></i>
                                     </a>
                                 </div>
-                                <a class="cr-shopping-bag" href="javascript:void(0)">
+                                <!-- <a class="cr-shopping-bag" href="javascript:void(0)">
                                     <i class="ri-shopping-bag-line"></i>
-                                </a>
+                                </a> -->
                             </div>
                             <div class="cr-product-details">
                                 <div class="cr-brand">
